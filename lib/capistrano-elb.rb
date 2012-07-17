@@ -11,7 +11,7 @@ end
 
 class CapELB
   def initialize(aws_access_key_id, aws_secret_access_key, options={})
-	if File.exists?(options[:config])
+	if options.has_key?(:config) && File.exists?(options[:config])
 	  ec2credentials = YAML::load(File.open(options[:config]))
 	else
 	  ec2credentials = {
