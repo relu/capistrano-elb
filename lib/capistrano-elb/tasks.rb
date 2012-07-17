@@ -2,7 +2,7 @@ require "capistrano-elb"
 
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :elb do
-    capELB = CapELB.new()
+    capELB = CapELB.new(aws_access_key_id, aws_secret_access_key)
     
     task :remove do 
       servers = roles[:web].servers.map {|server| server.host}

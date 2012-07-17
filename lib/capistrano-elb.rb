@@ -10,8 +10,16 @@ class Hash
 end
 
 class CapELB
-  def initialize(configdir=File.join(Dir.pwd, 'config'))
-    ec2credentials = YAML::load(File.open(File.join(configdir, 'ec2credentials.yaml')))
+  def initialize(aws_access_key_id, aws_secret_access_key, options={})
+	if File.exists?(options[:config])
+	  ec2credentials = YAML::load(File.open(options[:config]))
+	else
+	  ec2credentials = {
+		:aws_access_key_id => aws_access_key_id,
+		:aws_secret_access_key => aws_secret_access_key
+	  }
+	end
+
     aws = Fog::Compute.new(ec2credentials.merge({:provider=>'AWS'}))
     @regions = aws.describe_regions.body["regionInfo"].map {|region| region["regionName"]}
     @compute = {}
